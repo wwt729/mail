@@ -1,0 +1,25 @@
+spring:
+  profiles: dev
+server:
+  port: 8080
+
+---
+
+spring:
+  profiles: test
+server:
+  port: 8081
+
+---
+
+spring:
+  profiles: proc
+server:
+  port: 8082
+
+---
+
+# 指定当前的环境
+spring:
+  profiles:
+    active: dev

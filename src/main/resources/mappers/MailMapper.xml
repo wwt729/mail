@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanbo.mail.mapper.MailMapper">
+
+    <select id="selectByTime" resultType="com.example.mail.dto.MailDTO">
+        select m.*, mi.mail_subject, mi.mail_content from mail m
+        inner join mail_info mi on m.mail_uid=mi.mail_uid
+        where (m.status=0 and m.plan_send_time <![CDATA[ <= ]]> #{endTime})
+    </select>
+
+</mapper>

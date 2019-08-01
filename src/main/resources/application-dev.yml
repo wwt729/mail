@@ -1,0 +1,110 @@
+
+# 配置Kafka集群IP地址,多个IP以逗号隔开:
+spring:
+  kafka:
+    bootstrap-servers: 你的kafkaIP:端口号
+    producer:
+      retries: 2 #发送失败后的重复发送次数
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer #key序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer #value序列化方式
+      compression-type: gzip #压缩格式
+      batch-size: 16384 #批量发送的消息数量
+      buffer-memory: 33554432 #32M的批处理缓冲区
+    consumer:
+      auto-offset-reset: earliest #最早未被消费的offset
+      enable-auto-commit: false #是否开启自动提交
+      #auto-commit-interval: 1000 #自动提交的时间间隔
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #key解码方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #value解码方式
+      group-id: kafka.consumer.group.id.1
+      max-poll-records: 50
+      properties:
+        session-timeout-ms: 20000 #连接超时时间
+        max-poll-interval-ms: 15000 #手动提交设置与poll的心跳数,如果消息队列中没有消息，等待毫秒后，调用poll()方法。如果队列中有消息，立即消费消息，每次消费的消息的多少可以通过max.poll.records配置。
+        max-partition-fetch-bytes: 15728640 #设置拉取数据的大小 15M
+    client-id: kafkacli
+    listener:
+      ack-mode: manual_immediate
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url:  * #自己的
+    username: * #账号
+    password: * #密码
+    hikari:
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  # 邮箱服务器配置，以163邮箱为例
+  mail:
+    host: smtp.163.com #邮箱服务器地址
+    port: 25 #端口
+    username: *  #用户名
+    password: * #授权密码
+    default-encoding: UTF-8
+    properties:
+      from: *  #用户名
+      mail:
+        smtp:
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+  # 邮件模板
+  thymeleaf:
+    cache: false
+    prefix: classpath:/views/
+  # 邮件附件
+  servlet:
+    multipart:
+      max-file-size: 10MB #限制单个文件大小
+      max-request-size: 50MB #限制请求总量
+
+
+logging:
+  level:
+    com.example: debug
+  pattern:
+#    console: %d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n
+#    file: %d{yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n
+  path: C:\log
+
+# 邮件失败重试次数
+com:
+  example:
+    mail:
+      sendNumber: 3 #邮件发送失败重试次数
+      threadKillTime: 60 #线程超时杀死
+
+mybatis:
+  type-aliases-package: com.example.mail.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mappers/*Mapper.xml
+
+
+# 异步线程配置,配置核心线程数
+async:
+  executor:
+    thread:
+      core_pool_size: 15 #核心线程数量，线程池创建时候初始化的线程数
+      max_pool_size: 15 #最大线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
+      queue_capacity: 99999 #缓冲队列，用来缓冲执行任务的队列
+      keep_alive_seconds: 60 #当超过了核心线程出之外的线程在空闲时间到达之后会被销毁
+      await_termination_seconds: 30 #设置线程池中任务的等待时间，如果超过这个时候还没有销毁就强制销毁，以确保应用最后能够被关闭，而不是阻塞住。
+      name:
+        prefix: async-service-
+        prefixson: async-service-son
