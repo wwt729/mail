@@ -56,7 +56,7 @@ public class SendMessageService {
         Example example = new Example(Mail.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("mailUid", mailDTO.getMailUid());
-        // 数据库同 mail_uid 的邮件数量
+        // 数据库同mail_uid的邮件数量
         int count = mailMapper.selectCountByExample(example);
 
         Date now = new Date();
