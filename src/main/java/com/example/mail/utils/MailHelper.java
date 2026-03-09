@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @Component
-@EnableAsync  //开始异步支持
+@EnableAsync //开始异步支持
 public class MailHelper {
 
     //注入邮件工具类
