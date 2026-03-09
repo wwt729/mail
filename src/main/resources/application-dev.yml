@@ -48,7 +48,7 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
 
-  # 邮箱服务器配置，以163邮箱为例
+  # 邮箱服务器配置：以163邮箱为例
   mail:
     host: smtp.163.com #邮箱服务器地址
     port: 25 #端口
